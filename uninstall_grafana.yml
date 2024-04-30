@@ -1,0 +1,21 @@
+---
+- name: Uninstall Grafana
+  hosts: servers
+  become: yes  # Ensure that you have sudo privileges
+
+  tasks:
+    - name: Stop Grafana service
+      ansible.builtin.service:
+        name: grafana-server
+        state: stopped
+        enabled: no
+
+    - name: Remove Grafana package
+      ansible.builtin.package:
+        name: grafana
+        state: absent
+
+    - name: Remove Grafana APT repository
+      ansible.builtin.apt_repository:
+        repo: 'deb https://packages.grafana.com/oss/deb stable main'
+        state: absent
